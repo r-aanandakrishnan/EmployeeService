@@ -33,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         validators.validateInputData(employee);
         Employee employeeOptional = getEmployeeById(employeeId);
         employee.setEmployeeId(employeeId);
-        return employeeDAO.save(employeeg);
+        return employeeDAO.save(employee);
     }
 
     @Override
