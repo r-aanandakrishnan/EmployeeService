@@ -2,12 +2,13 @@ package com.cg.pecuniabank.employeeservice.sevice;
 
 import com.cg.pecuniabank.employeeservice.dao.EmployeeDAO;
 import com.cg.pecuniabank.employeeservice.entity.Employee;
+import com.cg.pecuniabank.employeeservice.exception.EmployeeNotFoundException;
 import com.cg.pecuniabank.employeeservice.exception.InvalidDataException;
 import com.cg.pecuniabank.employeeservice.exception.ReportGenerationException;
+import com.cg.pecuniabank.employeeservice.exception.UsernameAlreadyTakenException;
 import com.cg.pecuniabank.employeeservice.util.Validators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,8 +19,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -29,22 +28,39 @@ public class EmployeeServiceImpl implements EmployeeService {
     Validators validators;
 
     @Override
-    public Employee addEmployee(Employee employee) throws InvalidDataException {
+    public Employee addEmployee(Employee employee) throws InvalidDataException, UsernameAlreadyTakenException {
         validators.validateInputData(employee);
-        return employeeDAO.save(employee);
+        Employee emp;
+        try{
+            emp=employeeDAO.save(employee);
+        }
+        catch (Exception e)
+        {
+            throw new UsernameAlreadyTakenException("Username Already Taken. Enter unique username");
+        }
+        return emp;
     }
 
     @Override
-    public Employee getEmployeeById(long id) {
+    public Employee getEmployeeById(long id) throws EmployeeNotFoundException {
         Optional<Employee> employeeOptional = employeeDAO.findById(id);
+        try{
         return employeeOptional.get();
+        }
+        catch(Exception e){
+            throw new EmployeeNotFoundException("Employee is not there/deleted");
+        }
     }
 
     @Override
-    public Employee updateEmployee(long employeeId, Employee employee) throws InvalidDataException {
+    public Employee updateEmployee(long employeeId, Employee employee) throws InvalidDataException,UsernameAlreadyTakenException {
         validators.validateInputData(employee);
+        try{
         Employee employeeOptional = getEmployeeById(employeeId);
-        employee.setEmployeeId(employeeId);
+        employee.setEmployeeId(employeeId);}
+        catch (Exception e){
+            throw new UsernameAlreadyTakenException("Username Already Taken. Enter unique username");
+        }
         return employeeDAO.save(employee);
     }
 

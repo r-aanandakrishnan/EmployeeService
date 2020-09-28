@@ -6,12 +6,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.io.IOException;
 
 @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
-public class ReportGenerationException extends IOException {
-    public ReportGenerationException(String message) {
+
+public class UsernameAlreadyTakenException extends IOException {
+    public UsernameAlreadyTakenException(String message) {
         super(message);
     }
 
-    public ReportGenerationException(String message, Throwable cause) {
+    public UsernameAlreadyTakenException(String message, Throwable cause) {
         super(message, cause);
     }
 }

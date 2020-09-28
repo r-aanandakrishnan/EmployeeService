@@ -5,13 +5,14 @@ import javax.persistence.*;
 @Entity
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(name="emp_id_generator",initialValue = 1270,allocationSize = 1,sequenceName = "emp_id_sequence")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EMPLOYEE_ID_SEQ")
+    @SequenceGenerator(name = "EMPLOYEE_ID_SEQ", sequenceName = "EMPLOYEE_ID_SEQ", allocationSize = 1,initialValue = 1721)
     private long employeeId;
     private String employeeName;
     private String mobileNumber;
     private String email;
     private String address;
+    @Column(unique = true)
     private String username;
 
     public Employee() {

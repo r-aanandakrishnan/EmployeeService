@@ -1,6 +1,7 @@
 package com.cg.pecuniabank.employeeservice.controller;
 
 import com.cg.pecuniabank.employeeservice.entity.Employee;
+import com.cg.pecuniabank.employeeservice.exception.EmployeeNotFoundException;
 import com.cg.pecuniabank.employeeservice.exception.ReportGenerationException;
 import com.cg.pecuniabank.employeeservice.sevice.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class EmployeeController {
             produces = "application/json",
             headers = "Accept=application/json"
     )
-    public Employee getEmployeeWithId(@PathVariable Long id){
+    public Employee getEmployeeWithId(@PathVariable Long id) throws EmployeeNotFoundException {
         return employeeService.getEmployeeById(id);
     }
     @PostMapping(
