@@ -1,5 +1,6 @@
 package com.cg.pecuniabank.employeeservice.sevice;
 
+import com.cg.pecuniabank.employeeservice.controller.EmployeeController;
 import com.cg.pecuniabank.employeeservice.dao.EmployeeDAO;
 import com.cg.pecuniabank.employeeservice.entity.Employee;
 import com.cg.pecuniabank.employeeservice.exception.EmployeeNotFoundException;
@@ -7,6 +8,8 @@ import com.cg.pecuniabank.employeeservice.exception.InvalidDataException;
 import com.cg.pecuniabank.employeeservice.exception.ReportGenerationException;
 import com.cg.pecuniabank.employeeservice.exception.UsernameAlreadyTakenException;
 import com.cg.pecuniabank.employeeservice.util.Validators;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
@@ -26,7 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeDAO employeeDAO;
     @Autowired
     Validators validators;
-
+    Logger logger= LoggerFactory.getLogger(EmployeeServiceImpl.class);
     @Override
     public Employee addEmployee(Employee employee) throws InvalidDataException, UsernameAlreadyTakenException {
         validators.validateInputData(employee);
@@ -36,6 +39,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         catch (Exception e)
         {
+            logger.error("Username Already Taken. Enter unique username",UsernameAlreadyTakenException.class);
             throw new UsernameAlreadyTakenException("Username Already Taken. Enter unique username");
         }
         return emp;
@@ -48,6 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeOptional.get();
         }
         catch(Exception e){
+            logger.error("Employee not found",EmployeeNotFoundException.class);
             throw new EmployeeNotFoundException("Employee is not there/deleted");
         }
     }
@@ -117,6 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             bos.close();
         }
         catch(IOException exception){
+            logger.error("An error occurred when generating Employee Report",ReportGenerationException.class);
             throw new ReportGenerationException("An error occurred when generating Employee Report",exception);
         }
         return new ByteArrayInputStream(byteArrayData);
