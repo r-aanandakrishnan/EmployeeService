@@ -12,7 +12,7 @@ public class Validators {
             throw new InvalidDataException("Employee name cannot be empty");
         }
         if (employee.getAddress() == null || employee.getAddress().trim().isEmpty()) {
-            throw new InvalidDataException("Address name cannot be empty");
+            throw new InvalidDataException("Address cannot be empty");
         }
         if (employee.getEmail() == null || employee.getEmail().trim().isEmpty()) {
             throw new InvalidDataException("Email cannot be empty");
@@ -21,7 +21,7 @@ public class Validators {
             throw new InvalidDataException("Mobile number cannot be empty");
         }
         if (employee.getUsername() == null || employee.getUsername().trim().isEmpty()) {
-            throw new InvalidDataException("Email cannot be empty");
+            throw new InvalidDataException("Username cannot be empty");
         }
         if (employee.getMobileNumber().length() < 10 || employee.getMobileNumber().length() > 10) {
             throw new InvalidDataException("Mobile number should only have 10 digits");

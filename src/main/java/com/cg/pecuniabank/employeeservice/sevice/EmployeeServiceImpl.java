@@ -1,5 +1,6 @@
 package com.cg.pecuniabank.employeeservice.sevice;
 
+import com.cg.pecuniabank.employeeservice.DTO.RegistrationDTO;
 import com.cg.pecuniabank.employeeservice.controller.EmployeeController;
 import com.cg.pecuniabank.employeeservice.dao.EmployeeDAO;
 import com.cg.pecuniabank.employeeservice.entity.Employee;
@@ -22,6 +23,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -29,6 +31,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeDAO employeeDAO;
     @Autowired
     Validators validators;
+    @Autowired
+    RestTemplate restTemplate;
     Logger logger= LoggerFactory.getLogger(EmployeeServiceImpl.class);
     @Override
     public Employee addEmployee(Employee employee) throws InvalidDataException, UsernameAlreadyTakenException {
@@ -42,6 +46,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             logger.error("Username Already Taken. Enter unique username",UsernameAlreadyTakenException.class);
             throw new UsernameAlreadyTakenException("Username Already Taken. Enter unique username");
         }
+        RegistrationDTO registrationDTO=new RegistrationDTO(emp.getEmployeeName(), emp.getUsername(),"Default@123", emp.getEmail(),emp.getMobileNumber(),"employee",false);
+        restTemplate.postForObject("http://localhost:8090/register",registrationDTO,RegistrationDTO.class);
         return emp;
     }
 

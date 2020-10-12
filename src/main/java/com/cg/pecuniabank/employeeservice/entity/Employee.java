@@ -1,8 +1,11 @@
 package com.cg.pecuniabank.employeeservice.entity;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import javax.persistence.*;
 
 @Entity
+@CrossOrigin("http://localhost:4200")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EMPLOYEE_ID_SEQ")
